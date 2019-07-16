@@ -10,7 +10,7 @@ use LogicException;
 use ArrayIterator;
 
 /**
- * Base class intended to be used with 'collections' of route rules.
+ * A store for route rules.
  *
  * @author Nathan Bishop <nbish11@hotmail.com> (https://nathanbishop.name)
  * @copyright 2019 Nathan Bishop
@@ -24,23 +24,25 @@ class Collection implements IteratorAggregate, Countable
     private $rules = [];
 
     /**
-     * Add a route rule to the collection.
+     * Add a route to the collection.
      *
-     * @param Rule $rule Add the rule if it does not already exist.
+     * @param Rule $rule The route object to add.
+     * @throws LogicException When trying to add a route that already exists.
      */
     public function add(Rule $rule): void
     {
-    	if ($this->contains($rule)) {
-    		throw new LogicException('Rule already exists in collection.');
-    	}
+        if ($this->contains($rule)) {
+            throw new LogicException('Route already exists.');
+        }
 
-    	$this->rules[] = $rule;
+        $this->rules[] = $rule;
     }
 
     /**
-     * Remove a route rule from the collection.
+     * Remove a route from the collection.
      *
-     * @param Rule $rule Remove the rule if it exists.
+     * @param Rule $rule The route object to remove.
+     * @throws LogicException When trying to remove a route that has not beenadded previously.
      */
     public function remove(Rule $rule): void
     {
@@ -54,9 +56,9 @@ class Collection implements IteratorAggregate, Countable
     }
 
     /**
-     * Check if a specific rule was collected.
+     * Check if a route is in the collection.
      *
-     * @param Rule $rule The rule to check for.
+     * @param Rule $rule The route to check for.
      * @return boolean `true` if the rule exists, otherwise `false`.
      */
     public function contains(Rule $rule): bool
@@ -65,14 +67,14 @@ class Collection implements IteratorAggregate, Countable
     }
 
     /**
-     * Get the order in which a rule was added
+     * Get the order in which a route was added.
      *
-     * @param Rule $rule The rule to check for.
-     * @return integer The index of the rule.
+     * @param Rule $rule The route object to check for.
+     * @return integer The index (0 or a positive integer if it exists, -1 if it doesn't) of the route.
      */
     public function indexOf(Rule $rule): int
     {
-        foreach ($this as $key => $value) {
+        foreach ($this->rules as $key => $value) {
             if ($value === $rule) {
                 return $key;
             }
@@ -82,19 +84,31 @@ class Collection implements IteratorAggregate, Countable
     }
 
     /**
-     * Quickly determine if there are any rules contained in the collection.
+     * Merge another route collection into this one.
      *
-     * @return boolean `true`, if there are no rules in the collection, `false` otherwise.
+     * @param self $rules The other collection of routes to add.
      */
-    public function isEmpty(): bool
+    public function merge(self $rules): void
     {
-    	return count($this->rules) === 0;
+        foreach ($rules as $rule) {
+            $this->add($rule);
+        }
     }
 
     /**
-     * Count how many rules have been collected.
+     * Quickly determine if there are any routes contained in the collection.
      *
-     * @return integer The amount of rules contained within.
+     * @return boolean `true`, if the collection has not routes, `false` otherwise.
+     */
+    public function isEmpty(): bool
+    {
+    	return empty($this->rules);
+    }
+
+    /**
+     * Count the number of routes added.
+     *
+     * @return integer The number of routes added.
      */
     public function count(): int
     {
@@ -104,7 +118,7 @@ class Collection implements IteratorAggregate, Countable
     /**
      * Get an iterator that can be used with the `foreach` and other like constructs.
      *
-     * @return ArrayIterator An iterator for the currently contained rules.
+     * @return ArrayIterator An iterator for the currently contained routes.
      */
     public function getIterator(): ArrayIterator
     {
