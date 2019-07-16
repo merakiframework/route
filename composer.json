@@ -1,0 +1,38 @@
+{
+    "name": "meraki/route",
+    "require": {
+        "php": "^7.3",
+        "psr/http-message": "^1.0",
+        "psr/http-server-handler": "^1.0",
+        "psr/http-server-middleware": "^1.0"
+    },
+    "require-dev": {
+        "meraki/test-suite": "dev-master",
+        "zendframework/zend-diactoros": "^2.1",
+        "narrowspark/http-emitter": "^0.8.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nathan Bishop",
+            "email": "nbish11@hotmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Meraki\\Route\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Meraki\\Route\\": "tests/",
+            "MyApp\\Action\\": "examples/Action/",
+            "MyApp\\Model\\": "examples/Model/"
+        }
+    },
+    "scripts": {
+        "test": [
+            "phpunit"
+        ]
+    }
+}
