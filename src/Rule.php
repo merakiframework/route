@@ -126,7 +126,7 @@ final class Rule
      * @param  RequestHandler $handler [description]
      * @return [type]                  [description]
      */
-    public function create(string $method, string $pattern, RequestHandler $handler): self
+    public static function create(string $method, string $pattern, RequestHandler $handler): self
     {
     	return new self($method, new Pattern($pattern), $handler);
     }
