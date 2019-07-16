@@ -123,7 +123,7 @@ final class MatchResult
 	 * @param  [type]        $rules   [description]
 	 * @return [type]                 [description]
 	 */
-	public static function success(ServerRequest $request, Rule ...$rules): self
+	public static function found(ServerRequest $request, Rule ...$rules): self
 	{
 		$result = new self();
 		$result->type = self::FOUND;
