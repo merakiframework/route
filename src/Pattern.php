@@ -56,7 +56,7 @@ final class Pattern
 	 */
 	public function getPlaceholders(): array
 	{
-		return $this->placeholders
+		return $this->placeholders;
 	}
 
 	/**
