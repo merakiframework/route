@@ -131,7 +131,7 @@ final class Mapper extends Collection
      */
     public function map(string $method, string $requestTarget, RequestHandler $handler): Rule
     {
-        $rule = new Rule($method, $this->prefix . $requestTarget, $handler);
+        $rule = Rule::create($method, $this->prefix . $requestTarget, $handler);
 
         $this->add($rule);
 
