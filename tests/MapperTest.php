@@ -39,7 +39,7 @@ final class MapperTest extends TestSuite
 
 		$this->assertInstanceOf(Rule::class, $rule);
 		$this->assertEquals(strtoupper($method), $rule->getMethod());
-		$this->assertEquals($this->requestTarget, $rule->getRequestTarget());
+		$this->assertEquals($this->requestTarget, (string)$rule->getPattern());
 		$this->assertSame($this->handler, $rule->getHandler());
 	}
 
@@ -68,7 +68,7 @@ final class MapperTest extends TestSuite
 		$mapper->group('/action', function () use ($sut, $method) {
 			$rule = call_user_func([$this, $method], $sut->requestTarget, $sut->handler);
 
-			$sut->assertEquals('/action' . $sut->requestTarget, $rule->getRequestTarget());
+			$sut->assertEquals('/action' . $sut->requestTarget, (string)$rule->getPattern());
 		});
 	}
 
@@ -83,7 +83,7 @@ final class MapperTest extends TestSuite
 
 		$this->assertInstanceOf(Rule::class, $rule);
 		$this->assertEquals('VERB', $rule->getMethod());
-		$this->assertEquals($this->requestTarget, $rule->getRequestTarget());
+		$this->assertEquals($this->requestTarget, (string)$rule->getPattern());
 		$this->assertSame($this->handler, $rule->getHandler());
 	}
 
@@ -110,7 +110,7 @@ final class MapperTest extends TestSuite
 		$mapper->group('/action', function () use ($sut) {
 			$rule = $this->map('VERB', $sut->requestTarget, $sut->handler);
 
-			$sut->assertEquals('/action' . $sut->requestTarget, $rule->getRequestTarget());
+			$sut->assertEquals('/action' . $sut->requestTarget, (string) $rule->getPattern());
 		});
 	}
 
