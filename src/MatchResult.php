@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Meraki\Route\Rule;
 
 /**
- *
+ * Represents the result of a route attempting a match against the incoming request.
  *
  * @author Nathan Bishop <nbish11@hotmail.com> (https://nathanbishop.name)
  * @copyright 2019 Nathan Bishop
@@ -18,17 +18,17 @@ final class MatchResult
 	/**
 	 * @const integer [FOUND description]
 	 */
-	const FOUND = 200;
+	const MATCHED = 200;
 
 	/**
 	 * @const integer [NOT_FOUND description]
 	 */
-	const NOT_FOUND = 404;
+	const REQUEST_TARGET_NOT_MATCHED = 404;
 
 	/**
 	 * @const integer [METHOD_NOT_ALLOWED description]
 	 */
-	const METHOD_NOT_ALLOWED = 405;
+	const METHOD_NOT_MATCHED = 405;
 
 	/**
 	 * @var integer [$type description]
@@ -41,24 +41,32 @@ final class MatchResult
 	private $request;
 
 	/**
-	 * @var Rule[] [$rules description]
+	 * @var Rule [$matchedRule description]
 	 */
-	private $rules;
+	private $matchedRule;
 
 	/**
 	 * @var string[] [$allowedMethods description]
 	 */
 	private $allowedMethods;
 
-	private function __construct()
+	/**
+	 * [__construct description]
+	 *
+	 * @param integer $type [description]
+	 * @param ServerRequest $request [description]
+	 */
+	private function __construct(int $type, ServerRequest $request)
 	{
-		// intentionally private constructor
+		$this->type = $type;
+		$this->request = $request;
+		$this->allowedMethods = [];
 	}
 
 	/**
 	 * [getType description]
 	 *
-	 * @return [type] [description]
+	 * @return integer [description]
 	 */
 	public function getType(): int
 	{
@@ -68,7 +76,7 @@ final class MatchResult
 	/**
 	 * [getRequest description]
 	 *
-	 * @return [type] [description]
+	 * @return ServerRequest [description]
 	 */
 	public function getRequest(): ServerRequest
 	{
@@ -76,19 +84,19 @@ final class MatchResult
 	}
 
 	/**
-	 * [getRules description]
+	 * [getMatchedRule description]
 	 *
-	 * @return [type] [description]
+	 * @return Rule|null [description]
 	 */
-	public function getRules(): array
+	public function getMatchedRule(): ?Rule
 	{
-		return $this->rules;
+		return $this->matchedRule;
 	}
 
 	/**
 	 * [getAllowedMethods description]
 	 *
-	 * @return [type] [description]
+	 * @return string[] [description]
 	 */
 	public function getAllowedMethods(): array
 	{
@@ -102,7 +110,7 @@ final class MatchResult
 	 */
 	public function isSuccessful(): bool
 	{
-		return $this->type === self::FOUND;
+		return $this->type === self::MATCHED;
 	}
 
 	/**
@@ -112,24 +120,21 @@ final class MatchResult
 	 */
 	public function isFailure(): bool
 	{
-		return $this->type === self::NOT_FOUND
-			|| $this->type === self::METHOD_NOT_ALLOWED;
+		return $this->type === self::REQUEST_TARGET_NOT_MATCHED
+			|| $this->type === self::METHOD_NOT_MATCHED;
 	}
 
 	/**
 	 * [success description]
 	 *
-	 * @param  ServerRequest $request [description]
-	 * @param  [type]        $rules   [description]
-	 * @return [type]                 [description]
+	 * @param ServerRequest $request [description]
+	 * @param Rule $rule [description]
+	 * @return self [description]
 	 */
-	public static function found(ServerRequest $request, Rule ...$rules): self
+	public static function matched(ServerRequest $request, Rule $rule): self
 	{
-		$result = new self();
-		$result->type = self::FOUND;
-		$result->request = $request;
-		$result->rules = $rules;
-		$result->allowedMethods = [];
+		$result = new self(self::MATCHED, $request);
+		$result->matchedRule = $rule;
 
 		return $result;
 	}
@@ -137,33 +142,24 @@ final class MatchResult
 	/**
 	 * [notFound description]
 	 *
-	 * @param  ServerRequest $request [description]
-	 * @return [type]                 [description]
+	 * @param ServerRequest $request [description]
+	 * @return self [description]
 	 */
-	public static function notFound(ServerRequest $request): self
+	public static function requestTargetNotMatched(ServerRequest $request): self
 	{
-		$result = new self();
-		$result->type = self::NOT_FOUND;
-		$result->request = $request;
-		$result->rules = [];
-		$result->allowedMethods = [];
-
-		return $result;
+		return new self(self::REQUEST_TARGET_NOT_MATCHED, $request);
 	}
 
 	/**
 	 * [methodNotAllowed description]
 	 *
-	 * @param  ServerRequest $request        [description]
-	 * @param  [type]        $allowedMethods [description]
-	 * @return [type]                        [description]
+	 * @param ServerRequest $request [description]
+	 * @param string[] $allowedMethods [description]
+	 * @return self [description]
 	 */
-	public static function methodNotAllowed(ServerRequest $request, string ...$allowedMethods): self
+	public static function methodNotMatched(ServerRequest $request, array $allowedMethods): self
 	{
-		$result = new self();
-		$result->type = self::METHOD_NOT_ALLOWED;
-		$result->request = $request;
-		$result->rules = [];
+		$result = new self(self::METHOD_NOT_MATCHED, $request);
 		$result->allowedMethods = $allowedMethods;
 
 		return $result;
