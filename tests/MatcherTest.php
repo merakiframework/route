@@ -13,7 +13,7 @@ final class MatcherTest extends TestSuite
      */
     public function it_exists(): void
     {
-        $itExists = interface_exists(Matcher::class);
+        $itExists = class_exists(Matcher::class);
 
         $this->assertTrue($itExists);
     }
