@@ -49,7 +49,7 @@ final class Matcher
 
         // else, 404
         if (empty($matchedRules)) {
-            return MatchResult::notFound($request);
+            return MatchResult::requestTargetNotMatched($request);
         }
 
         // make sure rule matches method used and build 'allowed methods' in case of 405
@@ -57,10 +57,10 @@ final class Matcher
             $allowedMethods[] = $matchedRule->getMethod();
 
             if ($matchedRule->matchesMethod($request->getMethod())) {
-            	return MatchResult::found($request, $matchedRule);
+            	return MatchResult::matched($request, $matchedRule);
             }
         }
 
-        return MatchResult::methodNotAllowed($request, $allowedMethods);
+        return MatchResult::methodNotMatched($request, $allowedMethods);
     }
 }
