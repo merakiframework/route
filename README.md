@@ -1,5 +1,11 @@
 # Route
 
+[![Scrutinizer Build Status][scrutinizer-build-image]][scrutinizer-build-url]
+[![Scrutinizer Code Quality][scrutinizer-code-quality-image]][scrutinizer-code-quality-url]
+[![Scrutinizer Code Coverage][scrutinizer-code-coverage-image]][scrutinizer-code-coverage-url]
+[![Packagist Latest Stable Version][packagist-image]][packagist-url]
+[![MIT License][license-image]][license-url]
+
 > Frameware-agnostic, Middleware-compatible routing framework for PHP 7+.
 
 
@@ -54,3 +60,14 @@ Without help from the following people, software and services, this project woul
 ## License
 
 The MIT License (MIT). Please see the [LICENSE](LICENSE.md) file for more information.
+
+[scrutinizer-build-url]: https://scrutinizer-ci.com/g/merakiframework/route/build-status/master
+[scrutinizer-build-image]: https://scrutinizer-ci.com/g/merakiframework/route/badges/build.png?b=master
+[scrutinizer-code-quality-url]: https://scrutinizer-ci.com/g/merakiframework/route/?branch=master
+[scrutinizer-code-quality-image]: https://scrutinizer-ci.com/g/merakiframework/route/badges/quality-score.png?b=master
+[scrutinizer-code-coverage-url]: https://scrutinizer-ci.com/g/merakiframework/route/?branch=master
+[scrutinizer-code-coverage-image]: https://scrutinizer-ci.com/g/merakiframework/route/badges/coverage.png?b=master
+[packagist-url]: https://packagist.org/packages/meraki/route
+[packagist-image]: https://img.shields.io/packagist/v/meraki/route.svg
+[license-url]: https://raw.githubusercontent.com/merakiframework/route/master/LICENSE.md
+[license-image]: https://img.shields.io/badge/license-MIT-blue.svg
