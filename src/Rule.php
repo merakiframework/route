@@ -5,11 +5,10 @@ namespace Meraki\Route;
 
 use Meraki\Route\Pattern;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
-use Psr\Http\Message\ServerRequestInterface as ServerRequest;
-use Psr\Http\Message\ResponseInterface as Response;
+use InvalidArgumentException;
 
 /**
- *
+ * A mapping of an incoming request to its appropriate request-handler.
  *
  * @author Nathan Bishop <nbish11@hotmail.com> (https://nathanbishop.name)
  * @copyright 2019 Nathan Bishop
@@ -40,13 +39,18 @@ final class Rule
     /**
      * [__construct description]
      *
-     * @param string         $method  [description]
-     * @param Pattern        $pattern [description]
+     * @param string $method  [description]
+     * @param Pattern $pattern [description]
      * @param RequestHandler $handler [description]
+     * @throws InvalidArgumentException [<description>]
      */
     public function __construct(string $method, Pattern $pattern, RequestHandler $handler)
     {
-        $this->method = $method;
+        if (empty($method)) {
+    		throw new InvalidArgumentException('A request method was not provided.');
+    	}
+
+    	$this->method = $method;
         $this->pattern = $pattern;
         $this->handler = $handler;
         $this->name = '';
@@ -55,7 +59,7 @@ final class Rule
     /**
      * [getMethod description]
      *
-     * @return [type] [description]
+     * @return string [description]
      */
     public function getMethod(): string
     {
@@ -65,7 +69,7 @@ final class Rule
     /**
      * [getPattern description]
      *
-     * @return [type] [description]
+     * @return Pattern [description]
      */
     public function getPattern(): Pattern
     {
@@ -75,7 +79,7 @@ final class Rule
     /**
      * [getHandler description]
      *
-     * @return [type] [description]
+     * @return RequestHandler [description]
      */
     public function getHandler(): RequestHandler
     {
@@ -85,7 +89,7 @@ final class Rule
     /**
      * [getName description]
      *
-     * @return [type] [description]
+     * @return string [description]
      */
     public function getName(): string
     {
@@ -95,14 +99,22 @@ final class Rule
     /**
      * [name description]
      *
-     * @param  string $name [description]
-     * @return [type]       [description]
+     * @param string $name [description]
+     * @throws InvalidArgumentException [description]
+     * @throws InvalidArgumentException [description]
+     * @return self [description]
      */
     public function name(string $name): self
     {
-        if (!$this->name) {
-            $this->name = $name;
+    	if ($this->name) {
+    		throw new InvalidArgumentException('Name is immutable and cannot be changed once set.');
+    	}
+
+        if (empty($name)) {
+        	throw new InvalidArgumentException('Name cannot be empty.');
         }
+
+        $this->name = $name;
 
         return $this;
     }
@@ -110,8 +122,8 @@ final class Rule
     /**
      * [matchesMethod description]
      *
-     * @param  string $requestMethod [description]
-     * @return [type]                [description]
+     * @param string $requestMethod [description]
+     * @return boolean [description]
      */
     public function matchesMethod(string $requestMethod): bool
     {
@@ -121,10 +133,10 @@ final class Rule
     /**
      * [create description]
      *
-     * @param  string         $method  [description]
-     * @param  string         $pattern [description]
-     * @param  RequestHandler $handler [description]
-     * @return [type]                  [description]
+     * @param string $method  [description]
+     * @param string $pattern [description]
+     * @param RequestHandler $handler [description]
+     * @return self [description]
      */
     public static function create(string $method, string $pattern, RequestHandler $handler): self
     {
