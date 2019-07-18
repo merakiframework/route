@@ -71,7 +71,7 @@ final class Pattern
 	 */
 	public function compile(): string
 	{
-		$regex = preg_replace(self::PLACEHOLDER_SEARCH_REGEX, self::PLACEHOLDER_REPLACE_REGEX, $this->pattern);
+		$regex = preg_replace_callback(self::PLACEHOLDER_SEARCH_REGEX, [$this, 'extractPlaceholders'], $this->pattern);
     	$regex = sprintf('~^%s$~', $regex);
 
         return $regex;
@@ -89,7 +89,7 @@ final class Pattern
 		$requestTarget = $this->stripQueryString($requestTarget);
 
 		if (preg_match($compiledPattern, $requestTarget, $matches) === 1) {
-			$this->placeholders = $this->extractPlaceholders($matches);
+			$this->setPlaceholderValues($matches);
 
 			return true;
 		}
@@ -98,25 +98,30 @@ final class Pattern
 	}
 
 	/**
-	 * Get only the placeholders from the preg_match result.
+	 * Extract placeholder names and give it an appropriate regex for matching.
 	 *
-	 * @param string[] $matches The results from preg_match().
-	 * @return string[] The results from preg_match(), but without the numeric indexes or whole matches.
+	 * @param array $matches The matches returned from compile().
+	 * @return string The regex to use in place of the placeholder name.
 	 */
-	private function extractPlaceholders(array $matches): array
+	private function extractPlaceholders(array $matches): string
 	{
-        return array_filter($matches, [$this, 'isNotNumeric'], ARRAY_FILTER_USE_KEY);
+		$this->placeholders[$matches[1]] = null;
+
+		return sprintf('(?<%s>[^/]+)', $matches[1]);
 	}
 
 	/**
-	 * Check if a value is NOT numeric.
+	 * Set the placeholder values from the match results.
 	 *
-	 * @param mixed $value The value to check for.
-	 * @return boolean `true` if the value is NOT a number, `false` if it is a number.
+	 * @param string[] $matches The results from preg_match().
 	 */
-	private function isNotNumeric($value): bool
+	private function setPlaceholderValues(array $matches): void
 	{
-		return !is_numeric($value);
+		foreach ($this->placeholders as $key => $value) {
+			if (isset($matches[$key])) {
+				$this->placeholders[$key] = $matches[$key];
+			}
+		}
 	}
 
 	/**
