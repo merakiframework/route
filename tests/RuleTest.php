@@ -5,15 +5,27 @@ namespace Meraki\Route;
 
 use Meraki\TestSuite;
 use Meraki\Route\Rule;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Meraki\Route\Pattern;
+use InvalidArgumentException;
 
 final class RuleTest extends TestSuite
 {
+	private $pattern;
+	private $handler;
+
+	public function setUp(): void
+    {
+    	$this->pattern = new Pattern('*');
+    	$this->handler = $this->createMock(RequestHandler::class);
+    }
+
     /**
      * @test
      */
     public function it_exists(): void
     {
-        $itExists = interface_exists(Rule::class);
+        $itExists = class_exists(Rule::class);
 
         $this->assertTrue($itExists);
     }
@@ -21,40 +33,12 @@ final class RuleTest extends TestSuite
     /**
      * @test
      */
-    public function method_is_normalised_to_uppercase(): void
+    public function throws_exception_if_method_is_empty(): void
     {
-    	$rule = new Rule('get', '/', $this->action);
+    	$expectedException = new InvalidArgumentException('A request method was not provided.');
 
-    	$method = $rule->getMethod();
-
-    	$this->assertEquals('GET', $method);
-    }
-
-    /**
-     * @test
-     * @dataProvider invalidForms
-     */
-    public function throws_exception_if_not_an_allowed_form(string $invalidForm): void
-    {
-    	$expectedException = new InvalidArgumentException('Request target must me in asterix or absolute form.');
-
-    	$callback = function () use ($invalidForm) {
-    		$rule = new Rule('GET', $invalidForm, $this->action);
-    	};
-
-    	$this->assertThrows($expectedException, $callback);
-    }
-
-    /**
-     * @test
-     * @dataProvider validForms
-     */
-    public function throws_exception_if_not_an_allowed_form(string $validForm): void
-    {
-    	$expectedException = new InvalidArgumentException('Request target must me in asterix or absolute form.');
-
-    	$callback = function () use ($validForm) {
-    		$rule = new Rule('GET', $validForm, $this->action);
+    	$callback = function () {
+    		$rule = new Rule('', $this->pattern, $this->handler);
     	};
 
     	$this->assertThrows($expectedException, $callback);
@@ -63,32 +47,105 @@ final class RuleTest extends TestSuite
     /**
      * @test
      */
-    public function can_name_rule(): void
+    public function method_is_set(): void
     {
-    	$expectedName = 'my.test.route';
-    	$rule = new Rule('get', '/', $this->action);
+    	$expectedMethod = 'gEt';
+    	$rule = new Rule($expectedMethod, $this->pattern, $this->handler);
+
+    	$actual = $rule->getMethod();
+
+    	$this->assertEquals($expectedMethod, $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function handler_is_set(): void
+    {
+    	$rule = new Rule('get', $this->pattern, $this->handler);
+
+    	$actual = $rule->getHandler();
+
+    	$this->assertEquals($this->handler, $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function pattern_is_set(): void
+    {
+    	$rule = new Rule('get', $this->pattern, $this->handler);
+
+    	$actual = $rule->getPattern();
+
+    	$this->assertSame($this->pattern, $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function name_cannot_be_empty(): void
+    {
+    	$expectedException = new InvalidArgumentException('Name cannot be empty.');
+    	$rule = new Rule('get', $this->pattern, $this->handler);
+
+    	$callback = function () use ($rule) {
+    		$rule->name('');
+    	};
+
+    	$this->assertThrows($expectedException, $callback);
+    }
+
+    /**
+     * @test
+     */
+    public function name_is_immutable(): void
+    {
+    	$expectedException = new InvalidArgumentException('Name is immutable and cannot be changed once set.');
+    	$rule = new Rule('get', $this->pattern, $this->handler);
+    	$rule->name('test.route');
+
+    	$callback = function () use ($rule) {
+    		$rule->name('renamed.test.route');
+    	};
+
+    	$this->assertThrows($expectedException, $callback);
+    }
+
+    /**
+     * @test
+     */
+    public function name_is_set(): void
+    {
+    	$expectedName = 'test.route';
+    	$rule = new Rule('get', $this->pattern, $this->handler);
 
     	$rule->name($expectedName);
 
     	$this->assertEquals($expectedName, $rule->getName());
     }
 
-    public function rule_name_cannot_be_empty(): void
+    /**
+     * @test
+     */
+    public function request_method_is_matched_to_rule_if_they_are_equivalent(): void
     {
-    	$expectedException = new InvalidArgumentException('Rule name cannot be empty!');
+    	$rule = new Rule('get', $this->pattern, $this->handler);
+
+    	$this->assertTrue($rule->matchesMethod('get'));
+    	$this->assertTrue($rule->matchesMethod('GET'));
+    	$this->assertTrue($rule->matchesMethod('gEt'));
     }
 
-    public function invalidForms(): array
+    /**
+     * @test
+     */
+    public function request_method_is_not_matched_to_rule_if_they_are_not_equivalent(): void
     {
-    	return [
-    		'' => []
-    	];
-    }
+    	$rule = new Rule('get', $this->pattern, $this->handler);
 
-    public function validForms(): array
-    {
-    	return [
-    		'asterix form' => ['*']
-    	];
+    	$this->assertFalse($rule->matchesMethod('post'));
+    	$this->assertFalse($rule->matchesMethod('POST'));
+    	$this->assertFalse($rule->matchesMethod('pOsT'));
     }
 }
