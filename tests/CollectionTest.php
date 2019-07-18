@@ -5,6 +5,7 @@ namespace Meraki\Route;
 
 use Meraki\TestSuite;
 use Meraki\Route\Collection;
+use Meraki\Route\Pattern;
 use LogicException;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
@@ -16,8 +17,8 @@ final class CollectionTest extends TestSuite
     public function setUp(): void
     {
     	$this->action = $this->createMock(RequestHandler::class);
-        $this->basicRule = new Rule('get', '/posts', $this->action);
-        $this->complexRule = new Rule('get', '/api/:version/users/:id', $this->action);
+        $this->basicRule = new Rule('get', new Pattern('/posts'), $this->action);
+        $this->complexRule = new Rule('get', new Pattern('/api/:version/users/:id'), $this->action);
     }
 
     /**
@@ -129,7 +130,7 @@ final class CollectionTest extends TestSuite
      */
     public function same_rule_cannot_be_added_twice(): void
     {
-    	$expectedException = new LogicException('Rule already exists in collection.');
+    	$expectedException = new LogicException('Route rule already exists.');
     	$rules = new Collection();
     	$rules->add($this->basicRule);
 
