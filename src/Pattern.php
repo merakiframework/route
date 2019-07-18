@@ -15,12 +15,12 @@ final class Pattern
 	/**
      * @const string [PLACEHOLDER_REGEX description]
      */
-    const PLACEHOLDER_REGEX = '`:([^/]+)`';
+    const PLACEHOLDER_SEARCH_REGEX = '~:([^/]+)~';
 
     /**
      * @const string [COMPILED_PLACEHOLDER_REGEX description]
      */
-    const COMPILED_PLACEHOLDER_REGEX = '(?<\1>[^/]+)';
+    const PLACEHOLDER_REPLACE_REGEX = '(?<\1>[^/]+)';
 
     /**
      * @var string [$pattern description]
@@ -33,11 +33,6 @@ final class Pattern
 	private $placeholders;
 
 	/**
-	 * @var string[] [$constraints description]
-	 */
-	private $constraints;
-
-	/**
 	 * Constructor.
 	 *
 	 * @param string $pattern [description]
@@ -46,7 +41,6 @@ final class Pattern
 	{
 		$this->pattern = $this->stripQueryString($pattern);
 		$this->placeholders = [];
-		$this->constraints = [];
 	}
 
 	/**
@@ -60,20 +54,6 @@ final class Pattern
 	}
 
 	/**
-	 * Compile the pattern and placeholder constraints into a regular expression.
-	 *
-	 * @todo Extract into a separate object along with the placeholders (something like `CompiledPattern`).
-	 * @return string The regular expression representing this pattern.
-	 */
-	public function compile(): string
-	{
-		$pattern = preg_replace(self::PLACEHOLDER_REGEX, self::COMPILED_PLACEHOLDER_REGEX, $this->pattern);
-        $pattern = sprintf('`^%s$`', $pattern);
-
-        return $pattern;
-	}
-
-	/**
 	 * Allow this object to be treated like a string.
 	 *
 	 * @return string The pattern BEFORE it's compiled.
@@ -84,6 +64,20 @@ final class Pattern
 	}
 
 	/**
+	 * Compile the request-target pattern into a regular expression.
+	 *
+	 * @todo Extract into a separate object along with the placeholders (something like `CompiledPattern`).
+	 * @return string A regular expression representing the pattern.
+	 */
+	public function compile(): string
+	{
+		$regex = preg_replace(self::PLACEHOLDER_SEARCH_REGEX, self::PLACEHOLDER_REPLACE_REGEX, $this->pattern);
+    	$regex = sprintf('~^%s$~', $regex);
+
+        return $regex;
+	}
+
+	/**
 	 * Compiles the pattern, checks if the request-target matches and extracts the placeholders.
 	 *
 	 * @param string $requestTarget The request-target to match against.
@@ -91,10 +85,10 @@ final class Pattern
 	 */
 	public function matches(string $requestTarget): bool
 	{
-		$pattern = $this->compile();
+		$compiledPattern = $this->compile();
 		$requestTarget = $this->stripQueryString($requestTarget);
 
-		if (preg_match($pattern, $requestTarget, $matches) === 1) {
+		if (preg_match($compiledPattern, $requestTarget, $matches) === 1) {
 			$this->placeholders = $this->extractPlaceholders($matches);
 
 			return true;
