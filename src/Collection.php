@@ -32,7 +32,7 @@ class Collection implements IteratorAggregate, Countable
     public function add(Rule $rule): void
     {
         if ($this->contains($rule)) {
-            throw new LogicException('Route already exists.');
+            throw new LogicException('Route rule already exists.');
         }
 
         $this->rules[] = $rule;
