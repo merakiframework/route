@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Meraki\Route;
 
 use Meraki\Route\Collection;
+use Meraki\Route\Rule;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Closure;
 
@@ -26,7 +27,7 @@ final class Mapper extends Collection
      *
      * @param string $requestTarget The path/pattern the route should respond to.
      * @param callable $handler The method/function to call when a route is matched.
-     * @return Route The actual route object being added to the collection.
+     * @return Rule The actual route object being added to the collection.
      */
     public function head(string $requestTarget, RequestHandler $handler): Rule
     {
@@ -38,7 +39,7 @@ final class Mapper extends Collection
      *
      * @param string $requestTarget The path/pattern the route should respond to.
      * @param callable $handler The method/function to call when a route is matched.
-     * @return Route The actual route object being added to the collection.
+     * @return Rule The actual route object being added to the collection.
      */
     public function get(string $requestTarget, RequestHandler $handler): Rule
     {
@@ -50,7 +51,7 @@ final class Mapper extends Collection
      *
      * @param string $requestTarget The path/pattern the route should respond to.
      * @param callable $handler The method/function to call when a route is matched.
-     * @return Route The actual route object being added to the collection.
+     * @return Rule The actual route object being added to the collection.
      */
     public function post(string $requestTarget, RequestHandler $handler): Rule
     {
@@ -62,7 +63,7 @@ final class Mapper extends Collection
      *
      * @param string $requestTarget The path/pattern the route should respond to.
      * @param callable $handler The method/function to call when a route is matched.
-     * @return Route The actual route object being added to the collection.
+     * @return Rule The actual route object being added to the collection.
      */
     public function put(string $requestTarget, RequestHandler $handler): Rule
     {
@@ -74,7 +75,7 @@ final class Mapper extends Collection
      *
      * @param string $requestTarget The path/pattern the route should respond to.
      * @param callable $handler The method/function to call when a route is matched.
-     * @return Route The actual route object being added to the collection.
+     * @return Rule The actual route object being added to the collection.
      */
     public function patch(string $requestTarget, RequestHandler $handler): Rule
     {
@@ -86,7 +87,7 @@ final class Mapper extends Collection
      *
      * @param string $requestTarget The path/pattern the route should respond to.
      * @param callable $handler The method/function to call when a route is matched.
-     * @return Route The actual route object being added to the collection.
+     * @return Rule The actual route object being added to the collection.
      */
     public function delete(string $requestTarget, RequestHandler $handler): Rule
     {
@@ -98,7 +99,7 @@ final class Mapper extends Collection
      *
      * @param string $requestTarget The path/pattern the route should respond to.
      * @param callable $handler The method/function to call when a route is matched.
-     * @return Route The actual route object being added to the collection.
+     * @return Rule The actual route object being added to the collection.
      */
     public function options(string $requestTarget, RequestHandler $handler): Rule
     {
