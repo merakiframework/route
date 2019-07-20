@@ -1,0 +1,13 @@
+checks:
+	php: true
+filter:
+    excluded_paths:
+        - tests/*
+        - vendor/*
+build:
+  nodes:
+    analysis:
+      tests:
+        override:
+          - php-scrutinizer-run
+          - command: phpcs-run --config phpcs.xml
