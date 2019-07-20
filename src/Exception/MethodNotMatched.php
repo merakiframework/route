@@ -72,7 +72,7 @@ final class MethodNotMatched extends RuntimeException implements RouteException
     /**
      * [generateMessage description]
      *
-     * @return strings [description]
+     * @return string [description]
      */
     private function generateMessage(): string
     {
