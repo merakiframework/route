@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Meraki\Route\Collector;
+use Meraki\Route\Collection;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Meraki\Route\Rule;
 use Meraki\Route\Exception\RequestTargetNotMatched;
