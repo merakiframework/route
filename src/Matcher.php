@@ -8,6 +8,7 @@ use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Meraki\Route\Rule;
 use Meraki\Route\Exception\RequestTargetNotMatched;
 use Meraki\Route\Exception\MethodNotMatched;
+use Negotiation\Negotiator;
 
 /**
  * Cycles through a route group yielding any route rules that match the request.
@@ -24,9 +25,10 @@ final class Matcher
      *
      * @param Collection $rules [description]
      */
-    public function __construct(Collection $rules)
+    public function __construct(Collection $rules, Negotiator $negotiator = null)
     {
         $this->rules = $rules;
+        $this->negotiator = $negotiator ?: new Negotiator();
     }
 
     /**
@@ -39,6 +41,8 @@ final class Matcher
     {
         $matchedRules = [];
         $allowedMethods = [];
+        $rulesMatchingMethod = [];
+        $allowedMediaTypes = [];
 
         // check for rules that matches the request-target
         foreach ($this->rules as $rule) {
@@ -57,10 +61,41 @@ final class Matcher
             $allowedMethods[] = $matchedRule->getMethod();
 
             if ($matchedRule->matchesMethod($request->getMethod())) {
-            	return MatchResult::matched($request, $matchedRule);
+            	$rulesMatchingMethod[] = $matchedRule;
             }
         }
 
-        return MatchResult::methodNotMatched($request, $allowedMethods);
+        // request-target and method do not match, 405
+        if (empty($rulesMatchingMethod)) {
+        	return MatchResult::methodNotMatched($request, $allowedMethods);
+        }
+
+    	$acceptHeader = $request->getHeaderLine('Accept');
+    	$genericMatch = null;
+
+    	// content negotiation: check for rules explicitly matching content-type
+    	foreach ($rulesMatchingMethod as $rule) {
+    		$supportedMediaTypes = $rule->getMediaTypes();
+
+    		// a rule with no defined media-types is the equivalent of accepting anything (*/*)
+    		// save the first match in case no specific one can be found.
+    		if (empty($supportedMediaTypes)) {
+    			$genericMatch = $rule;
+    			continue;
+    		}
+
+    		$allowedMediaTypes = array_merge($allowedMediaTypes, $supportedMediaTypes);
+
+    		// a more specific match was found: return it.
+    		if ($mediaType = $this->negotiator->getBest($acceptHeader, $supportedMediaTypes)) {
+    			return MatchResult::matched($request, $rule);
+    		}
+    	}
+
+    	if ($genericMatch) {
+    		return MatchResult::matched($request, $genericMatch);
+    	}
+
+        return MatchResult::acceptHeaderNotMatched($request, $allowedMediaTypes);
     }
 }
