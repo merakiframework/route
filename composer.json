@@ -4,7 +4,8 @@
         "php": "^7.3",
         "psr/http-message": "^1.0",
         "psr/http-server-handler": "^1.0",
-        "psr/http-server-middleware": "^1.0"
+        "psr/http-server-middleware": "^1.0",
+        "willdurand/negotiation": "^2.3"
     },
     "require-dev": {
         "meraki/test-suite": "dev-master",
