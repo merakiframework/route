@@ -11,6 +11,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Meraki\Route\MatchResult;
 use Meraki\Route\Exception\MethodNotMatched as MethodNotMatchedException;
 use Meraki\Route\Exception\RequestTargetNotMatched as RequestTargetNotMatchedException;
+use Meraki\Route\Exception\AcceptHeaderNotMatched as AcceptHeaderNotMatchedException;
 
 /**
  * Invokes the matched request-handler or modifies the response in case of failure.
@@ -63,6 +64,11 @@ final class Dispatcher implements Middleware
     			->withHeader('Allow', implode(',', $result->getAllowedMethods()));
     	}
 
+    	if ($result->getType() === $result::ACCEPT_HEADER_NOT_MATCHED) {
+    		return $handler->handle($request)
+    			->withStatus(406, 'Not Acceptable');
+    	}
+
     	return $handler->handle($request)->withStatus(404, 'Not Found');
     }
 
@@ -84,6 +90,10 @@ final class Dispatcher implements Middleware
 
     	if ($result->getType() === $result::METHOD_NOT_MATCHED) {
     		throw new MethodNotMatchedException($request->getMethod(), $result->getAllowedMethods());
+    	}
+
+    	if ($result->getType() === $result::ACCEPT_HEADER_NOT_MATCHED) {
+    		throw new AcceptHeaderNotMatchedException($request->getHeaderLine('Accept'), $result->getAllowedMediaTypes());
     	}
 
     	$rule = $result->getMatchedRule();
