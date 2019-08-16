@@ -5,6 +5,7 @@ namespace Meraki\Route;
 
 use Meraki\TestSuite;
 use Meraki\Route\Pattern;
+use Meraki\Route\Constraint;
 
 final class PatternTest extends TestSuite
 {
@@ -122,6 +123,32 @@ final class PatternTest extends TestSuite
     /**
      * @test
      */
+    public function returns_true_if_placeholder_matches_custom_constraint(): void
+    {
+    	$pattern = new Pattern('/say-hello/:person');
+    	$pattern->addConstraint('person', Constraint::alpha());
+
+    	$matched = $pattern->matches('/say-hello/nathan');
+
+    	$this->assertTrue($matched);
+    }
+
+    /**
+     * @test
+     */
+    public function returns_false_if_placeholder_does_not_match_custom_constraint(): void
+    {
+    	$pattern = new Pattern('/say-hello/:person');
+    	$pattern->addConstraint('person', Constraint::digit());
+
+    	$matched = $pattern->matches('/say-hello/nathan');
+
+    	$this->assertFalse($matched);
+    }
+
+    /**
+     * @test
+     */
     public function attempting_a_match_will_compile_the_pattern_before_matching(): void
     {
     	$pattern = new Pattern('/api/:version/users/:id');
@@ -144,5 +171,31 @@ final class PatternTest extends TestSuite
     	$result = $pattern->matches('/api/3/users/123');
 
     	$this->assertEquals($expectedPlaceholders, $pattern->getPlaceholders());
+    }
+
+    /**
+     * @test
+     */
+    public function can_add_different_regex_pattern_to_placeholders_using_constraints(): void
+    {
+    	$constraint = Constraint::digit();
+    	$pattern = new Pattern('/say-hello/:person');
+
+    	$pattern->addConstraint('person', $constraint);
+
+    	$this->assertTrue($pattern->hasConstraint('person'));
+    	$this->assertSame($constraint, $pattern->getConstraint('person'));
+    }
+
+    /**
+     * @test
+     */
+    public function a_default_regex_pattern_is_provided_for_placeholders_without_a_constraint(): void
+    {
+    	$constraint = Constraint::any();
+    	$pattern = new Pattern('/say-hello/:person');
+
+    	$this->assertFalse($pattern->hasConstraint('person'));
+    	$this->assertEquals($constraint, $pattern->getConstraint('person'));
     }
 }

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
+use Meraki\Route\Constraint;
+
 /**
  * Implementation of a 'request-target' but with placeholder support.
  *
@@ -33,6 +35,11 @@ final class Pattern
 	private $placeholders;
 
 	/**
+	 * @var Constraint[] [$constraints description]
+	 */
+	private $constraints;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string $pattern [description]
@@ -41,6 +48,7 @@ final class Pattern
 	{
 		$this->pattern = $this->stripQueryString($pattern);
 		$this->placeholders = [];
+		$this->constraints = [];
 	}
 
 	/**
@@ -51,6 +59,43 @@ final class Pattern
 	public function getPlaceholders(): array
 	{
 		return $this->placeholders;
+	}
+
+	/**
+	 * Add a constraint to a placeholder.
+	 *
+	 * @param string $placeholder A placeholder found in the pattern without the leading colon.
+	 * @param Constraint $constraint [description]
+	 */
+	public function addConstraint(string $placeholder, Constraint $constraint): void
+	{
+		$this->constraints[$placeholder] = $constraint;
+	}
+
+	/**
+	 * Check if a constraint has been set for the placeholder.
+	 *
+	 * @param string $placeholder A placeholder found in the pattern without the leading colon.
+	 * @return boolean Returns `true` if a constraint has been set for the placeholder.
+	 */
+	public function hasConstraint(string $placeholder): bool
+	{
+		return array_key_exists($placeholder, $this->constraints);
+	}
+
+	/**
+	 * Retrieve the constraint for the placeholder.
+	 *
+	 * @param string $placeholder A placeholder found in the pattern without the leading colon.
+	 * @return Constraint The constraint bound to the placeholder or a default one for it.
+	 */
+	public function getConstraint(string $placeholder): Constraint
+	{
+		if ($this->hasConstraint($placeholder)) {
+			return $this->constraints[$placeholder];
+		}
+
+		return Constraint::any();
 	}
 
 	/**
@@ -107,7 +152,7 @@ final class Pattern
 	{
 		$this->placeholders[$matches[1]] = null;
 
-		return sprintf('(?<%s>[^/]+)', $matches[1]);
+		return sprintf('(?<%s>%s)', $matches[1], $this->getConstraint($matches[1]));
 	}
 
 	/**
