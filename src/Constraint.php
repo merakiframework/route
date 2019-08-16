@@ -102,4 +102,15 @@ final class Constraint
 	{
 		return new self(str_replace('~', '\~', $regex));
 	}
+
+	/**
+	 * Create a constraint allowing any combination of letters
+	 * and digits for the placeholder to match.
+	 *
+	 * @return self [description]
+	 */
+	public static function alphaNumeric(): self
+	{
+		return new self('[a-zA-Z0-9]+');
+	}
 }

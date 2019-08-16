@@ -181,6 +181,46 @@ final class ConstraintTest extends TestSuite
 		$this->assertConstraintMatched($constraint, 'hello~world');
 	}
 
+	/**
+	 * @test
+	 * @dataProvider validAlphaNumericSegments
+	 */
+	public function alpha_numeric_constraint_matches_letters_and_digit(string $segment): void
+	{
+		$this->assertConstraintMatched(Constraint::alphaNumeric(), $segment);
+	}
+
+	public function validAlphaNumericSegments(): array
+	{
+		return [
+			'letters' => ['helloworld'],
+			'digits' => ['1234'],
+			'letters and digits (lowercase)' => ['h3ll0w0r1d'],
+			'letters and digits (uppercase)' => ['H3LL0W0R1D'],
+			'letters and digits (mixed case)' => ['h3ll0W0R1D']
+		];
+	}
+
+	/**
+	 * @test
+	 * @dataProvider invalidAlphaNumericSegments
+	 */
+	public function alpha_numeric_constraint_does_not_match_against_non_letters_and_digit(string $segment): void
+	{
+		$this->assertConstraintNotMatched(Constraint::alphaNumeric(), $segment);
+	}
+
+	public function invalidAlphaNumericSegments(): array
+	{
+		return [
+			'empty' => [''],
+			'snake case' => ['hello_world'],
+			'slug' => ['hello-world'],
+			'forward slash' => ['hello/world'],
+			'decimal' => ['3.14']
+		];
+	}
+
 	protected function assertConstraintMatched(Constraint $constraint, string $segment): void
 	{
 		$matched = preg_match('~^' . $constraint->getRegex() . '$~', $segment);
