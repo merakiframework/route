@@ -3,11 +3,8 @@ declare(strict_types=1);
 
 namespace Meraki\Route\Exception;
 
-use RuntimeException;
 use Meraki\Route\Exception as RouteException;
-use LogicException;
-use RecursiveIteratorIterator;
-use RecursiveArrayIterator;
+use RuntimeException;
 
 /**
  * Exception used when the 'accept' header could not be matched.
@@ -77,14 +74,7 @@ final class AcceptHeaderNotMatched extends RuntimeException implements RouteExce
 		$message = 'A representation could not be generated for the requested media-types.';
 
 		if (!empty($this->allowedMediaTypes)) {
-			$allowedMediaTypes = new RecursiveIteratorIterator(new RecursiveArrayIterator($this->allowedMediaTypes));
-			$message .= ' Try one of the following: ';
-
-			foreach ($allowedMediaTypes as $mediaType) {
-				$message .= $mediaType . ', ';
-			}
-
-			$message = rtrim($message, ', ');
+			$message .= ' Try one of the following: ' . implode(', ', $this->allowedMediaTypes);
 		}
 
 		return $message;
