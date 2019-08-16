@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Meraki\Route;
 
 use Meraki\Route\Pattern;
+use Meraki\Route\Constraint;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use InvalidArgumentException;
 
@@ -144,6 +145,20 @@ final class Rule
     public function accept(string $mediaType): self
     {
     	$this->mediaTypes[] = $mediaType;
+
+    	return $this;
+    }
+
+    /**
+     * [constrain description]
+     *
+     * @param string $placeholder [description]
+     * @param Constraint $constraint  [description]
+     * @return self [description]
+     */
+    public function constrain(string $placeholder, Constraint $constraint): self
+    {
+    	$this->pattern->addConstraint($placeholder, $constraint);
 
     	return $this;
     }

@@ -5,6 +5,7 @@ namespace Meraki\Route;
 
 use Meraki\TestSuite;
 use Meraki\Route\Rule;
+use Meraki\Route\Constraint;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Meraki\Route\Pattern;
 use InvalidArgumentException;
@@ -173,5 +174,20 @@ final class RuleTest extends TestSuite
     	$this->assertFalse($rule->matchesMethod('post'));
     	$this->assertFalse($rule->matchesMethod('POST'));
     	$this->assertFalse($rule->matchesMethod('pOsT'));
+    }
+
+    /**
+     * @test
+     */
+    public function can_add_constraints_to_placeholders(): void
+    {
+    	$constraint = Constraint::alpha();
+    	$pattern = new Pattern('/say-hello/:name');
+    	$rule = new Rule('get', $pattern, $this->handler);
+
+    	$rule->constrain('name', $constraint);
+
+    	$this->assertTrue($pattern->hasConstraint('name'));
+    	$this->assertSame($constraint, $pattern->getConstraint('name'));
     }
 }
