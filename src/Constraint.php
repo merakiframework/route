@@ -113,4 +113,15 @@ final class Constraint
 	{
 		return new self('[a-zA-Z0-9]+');
 	}
+
+	/**
+	 * Create a constraint allowing any combination of letters, digits
+	 * and dashes for the placeholder to match.
+	 *
+	 * @return self [description]
+	 */
+	public static function slug(): self
+	{
+		return new self('[a-zA-Z0-9-]+');
+	}
 }

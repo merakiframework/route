@@ -221,6 +221,44 @@ final class ConstraintTest extends TestSuite
 		];
 	}
 
+	/**
+	 * @test
+	 * @dataProvider validSlugSegments
+	 */
+	public function slug_constraint_matches_letters_digits_and_dashes(string $segment): void
+	{
+		$this->assertConstraintMatched(Constraint::slug(), $segment);
+	}
+
+	public function validSlugSegments(): array
+	{
+		return [
+			'letters' => ['hello-world'],
+			'digits' => ['12-34'],
+			'letters and digits (mixed case)' => ['h3ll0-W0R1D']
+		];
+	}
+
+	/**
+	 * @test
+	 * @dataProvider invalidSlugSegments
+	 */
+	public function slug_constraint_does_not_match_non_letters_digits_and_dashes(string $segment): void
+	{
+		$this->assertConstraintNotMatched(Constraint::slug(), $segment);
+	}
+
+	public function invalidSlugSegments(): array
+	{
+		return [
+			'empty' => [''],
+			'snake case' => ['hello_world'],
+			'forward slash' => ['hello/world'],
+			'decimal' => ['3.14'],
+			'percent encoding' => ['hello%20world']
+		];
+	}
+
 	protected function assertConstraintMatched(Constraint $constraint, string $segment): void
 	{
 		$matched = preg_match('~^' . $constraint->getRegex() . '$~', $segment);
