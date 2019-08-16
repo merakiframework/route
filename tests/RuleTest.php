@@ -33,6 +33,32 @@ final class RuleTest extends TestSuite
     /**
      * @test
      */
+    public function new_rule_has_no_media_types_defined(): void
+    {
+    	$rule = new Rule('HEAD', $this->pattern, $this->handler);
+
+    	$supportedMediaTypes = $rule->getMediaTypes();
+
+    	$this->assertEmpty($supportedMediaTypes);
+    }
+
+    /**
+     * @test
+     */
+    public function can_add_a_media_type_explicitly_supported_by_rule(): void
+    {
+    	$expectedMediaType = 'application/json';
+    	$rule = new Rule('HEAD', $this->pattern, $this->handler);
+    	$rule->accept($expectedMediaType);
+
+    	$supportedMediaTypes = $rule->getMediaTypes();
+
+    	$this->assertContains($expectedMediaType, $supportedMediaTypes);
+    }
+
+    /**
+     * @test
+     */
     public function throws_exception_if_method_is_empty(): void
     {
     	$expectedException = new InvalidArgumentException('A request method was not provided.');
