@@ -80,7 +80,10 @@ final class Matcher
     		// a rule with no defined media-types is the equivalent of accepting anything (*/*)
     		// save the first match in case no specific one can be found.
     		if (empty($supportedMediaTypes)) {
-    			$genericMatch = $rule;
+    			if (!$genericMatch) {
+    				$genericMatch = $rule;
+    			}
+
     			continue;
     		}
 

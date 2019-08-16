@@ -6,6 +6,7 @@ namespace Meraki\Route;
 use Meraki\TestSuite;
 use Meraki\Route\Matcher;
 use Meraki\Route\Mapper;
+use Meraki\Route\Constraint;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Zend\Diactoros\ServerRequestFactory;
 
@@ -21,6 +22,12 @@ final class MatcherTest extends TestSuite
 
 		$this->genericRule = $this->mapper->get('/users', $this->handler);
 		$this->specificRule = $this->mapper->get('/users', $this->handler)->accept('application/json');
+
+		$this->showUserByIdRule = $this->mapper->get('/users/:id', $this->handler)
+			->constrain('id', Constraint::digit());
+
+		$this->showUserByUsernameRule = $this->mapper->get('/users/:username', $this->handler)
+			->constrain('username', Constraint::alphaNumeric());
 
 		$this->matcher = new Matcher($this->mapper);
 		$this->requestFactory = new ServerRequestFactory();
@@ -82,5 +89,17 @@ final class MatcherTest extends TestSuite
     	$result = $this->matcher->match($request);
 
     	$this->assertSame($this->genericRule, $result->getMatchedRule());
+    }
+
+    /**
+     * @test
+     */
+    public function returns_first_rule_if_two_similar_endpoints_can_be_matched(): void
+    {
+    	$request = $this->requestFactory->createServerRequest('GET', '/users/465');
+
+    	$result = $this->matcher->match($request);
+
+    	$this->assertSame($this->showUserByIdRule, $result->getMatchedRule());
     }
 }
