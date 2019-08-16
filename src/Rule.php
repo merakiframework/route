@@ -37,6 +37,11 @@ final class Rule
     private $name;
 
     /**
+     * @var string[] [$mediaTypes description]
+     */
+    private $mediaTypes;
+
+    /**
      * [__construct description]
      *
      * @param string $method  [description]
@@ -54,6 +59,7 @@ final class Rule
         $this->pattern = $pattern;
         $this->handler = $handler;
         $this->name = '';
+        $this->mediaTypes = [];
     }
 
     /**
@@ -97,6 +103,16 @@ final class Rule
     }
 
     /**
+     * [getMediaTypes description]
+     *
+     * @return string[] [description]
+     */
+    public function getMediaTypes(): array
+    {
+    	return $this->mediaTypes;
+    }
+
+    /**
      * [name description]
      *
      * @param string $name [description]
@@ -117,6 +133,19 @@ final class Rule
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * [accept description]
+     *
+     * @param string $mediaType [description]
+     * @return self [description]
+     */
+    public function accept(string $mediaType): self
+    {
+    	$this->mediaTypes[] = $mediaType;
+
+    	return $this;
     }
 
     /**
