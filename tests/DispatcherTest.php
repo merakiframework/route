@@ -30,6 +30,7 @@ final class DispatcherTest extends TestSuite
 		$this->mapper = new Mapper();
 		$this->mapper->get('/', $this->handler);
 		$this->mapper->get('/say-hello/:person', $this->handler);
+		$this->mapper->get('/xml-file', $this->handler)->accept('text/xml');
 
 		$this->matcher = new Matcher($this->mapper);
 
@@ -108,5 +109,18 @@ final class DispatcherTest extends TestSuite
     	$response = $dispatcher->process($serverRequest, $this->handler);
 
     	$this->assertEquals(404, $response->getStatusCode());
+    }
+
+    /**
+     * @test
+     */
+    public function dispatching_as_middleware_modifies_response_with_406_status_if_accept_header_wasnt_matched(): void
+    {
+    	$dispatcher = new Dispatcher($this->matcher);
+    	$serverRequest = $this->serverRequest->withRequestTarget('/xml-file')->withHeader('Accept', ['text/html']);
+
+    	$response = $dispatcher->process($serverRequest, $this->handler);
+
+    	$this->assertEquals(406, $response->getStatusCode());
     }
 }
