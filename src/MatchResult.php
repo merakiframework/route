@@ -31,6 +31,11 @@ final class MatchResult
 	const METHOD_NOT_MATCHED = 405;
 
 	/**
+	 * @const integer [ACCEPT_HEADER_NOT_MATCHED description]
+	 */
+	const ACCEPT_HEADER_NOT_MATCHED = 406;
+
+	/**
 	 * @var integer [$type description]
 	 */
 	private $type;
@@ -51,6 +56,11 @@ final class MatchResult
 	private $allowedMethods;
 
 	/**
+	 * @var string[][] [$allowedMediaTypes description]
+	 */
+	private $allowedMediaTypes;
+
+	/**
 	 * [__construct description]
 	 *
 	 * @param integer $type [description]
@@ -61,6 +71,7 @@ final class MatchResult
 		$this->type = $type;
 		$this->request = $request;
 		$this->allowedMethods = [];
+		$this->allowedMediaTypes = [];
 	}
 
 	/**
@@ -104,6 +115,16 @@ final class MatchResult
 	}
 
 	/**
+	 * [getAllowedMediaTypes description]
+	 *
+	 * @return string[][] [description]
+	 */
+	public function getAllowedMediaTypes(): array
+	{
+		return $this->allowedMediaTypes;
+	}
+
+	/**
 	 * [isSuccessful description]
 	 *
 	 * @return boolean [description]
@@ -121,7 +142,8 @@ final class MatchResult
 	public function isFailure(): bool
 	{
 		return $this->type === self::REQUEST_TARGET_NOT_MATCHED
-			|| $this->type === self::METHOD_NOT_MATCHED;
+			|| $this->type === self::METHOD_NOT_MATCHED
+			|| $this->type === self::ACCEPT_HEADER_NOT_MATCHED;
 	}
 
 	/**
@@ -161,6 +183,21 @@ final class MatchResult
 	{
 		$result = new self(self::METHOD_NOT_MATCHED, $request);
 		$result->allowedMethods = $allowedMethods;
+
+		return $result;
+	}
+
+	/**
+	 * [acceptHeaderNotMatched description]
+	 *
+	 * @param ServerRequest $request [description]
+	 * @param string[][] $allowedMediaTypes [description]
+	 * @return self [description]
+	 */
+	public static function acceptHeaderNotMatched(ServerRequest $request, array $allowedMediaTypes): self
+	{
+		$result = new self(self::ACCEPT_HEADER_NOT_MATCHED, $request);
+		$result->allowedMediaTypes = $allowedMediaTypes;
 
 		return $result;
 	}
