@@ -68,6 +68,6 @@ The MIT License (MIT). Please see the [LICENSE](LICENSE.md) file for more inform
 [scrutinizer-code-coverage-url]: https://scrutinizer-ci.com/g/merakiframework/route/?branch=master
 [scrutinizer-code-coverage-image]: https://scrutinizer-ci.com/g/merakiframework/route/badges/coverage.png?b=master
 [packagist-url]: https://packagist.org/packages/meraki/route
-[packagist-image]: https://img.shields.io/packagist/v/meraki/route.svg
+[packagist-image]: https://poser.pugx.org/meraki/route/v/stable
 [license-url]: https://raw.githubusercontent.com/merakiframework/route/master/LICENSE.md
 [license-image]: https://img.shields.io/badge/license-MIT-blue.svg
