@@ -69,7 +69,7 @@ final class Matcher
 
         // request-target and method do not match, 405
         if (empty($rulesMatchingMethod)) {
-        	return MatchResult::methodNotMatched($request, $allowedMethods);
+        	return MatchResult::methodNotMatched($request, $this->removeDuplicateMethods($allowedMethods));
         }
 
     	$acceptHeader = $request->getHeaderLine('Accept');
@@ -115,5 +115,12 @@ final class Matcher
 		}
 
 		return $method;
+    }
+
+    private function removeDuplicateMethods(array $methods): array
+    {
+    	// array_unique() function does not re-index array so using the
+    	// array_keys()/array_flip() trick to make array unique instead.
+    	return array_keys(array_flip(array_map('strtoupper', $methods)));
     }
 }

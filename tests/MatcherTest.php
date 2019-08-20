@@ -144,4 +144,16 @@ final class MatcherTest extends TestSuite
 
     	$this->assertSame($this->deleteUserRule, $result->getMatchedRule());
     }
+
+    /**
+     * @test
+     */
+    public function allowed_methods_provided_to_match_result_are_unique(): void
+    {
+    	$request = $this->requestFactory->createServerRequest('PATCH', '/users/465');
+
+    	$result = $this->matcher->match($request);
+
+    	$this->assertEquals(['GET', 'DELETE'], $result->getAllowedMethods());
+    }
 }
