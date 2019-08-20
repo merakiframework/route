@@ -21,6 +21,8 @@ composer require meraki/route
 
 ## Usage
 
+See the [Wiki](https://github.com/merakiframework/route/wiki).
+
 ## Testing
 
 To run the tests, run the following script:
