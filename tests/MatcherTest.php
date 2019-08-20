@@ -29,6 +29,9 @@ final class MatcherTest extends TestSuite
 		$this->showUserByUsernameRule = $this->mapper->get('/users/:username', $this->handler)
 			->constrain('username', Constraint::alphaNumeric());
 
+		$this->deleteUserRule = $this->mapper->delete('/users/:id', $this->handler)
+			->constrain('id', Constraint::digit());
+
 		$this->matcher = new Matcher($this->mapper);
 		$this->requestFactory = new ServerRequestFactory();
 	}
@@ -101,5 +104,44 @@ final class MatcherTest extends TestSuite
     	$result = $this->matcher->match($request);
 
     	$this->assertSame($this->showUserByIdRule, $result->getMatchedRule());
+    }
+
+    /**
+     * @test
+     */
+    public function will_match_a_form_method_override_if_post_request(): void
+    {
+    	$request = $this->requestFactory->createServerRequest('POST', '/users/465')
+    		->withParsedBody(['_METHOD' => 'delete']);
+
+    	$result = $this->matcher->match($request);
+
+    	$this->assertSame($this->deleteUserRule, $result->getMatchedRule());
+    }
+
+    /**
+     * @test
+     */
+    public function will_not_match_a_form_method_override_if_get_request(): void
+    {
+    	$request = $this->requestFactory->createServerRequest('GET', '/users/465')
+    		->withParsedBody(['_METHOD' => 'delete']);
+
+    	$result = $this->matcher->match($request);
+
+    	$this->assertSame($this->showUserByIdRule, $result->getMatchedRule());
+    }
+
+    /**
+     * @test
+     */
+    public function will_match_a_http_header_method_override(): void
+    {
+    	$request = $this->requestFactory->createServerRequest('GET', '/users/465')
+    		->withHeader('x-http-method-override', 'delete');
+
+    	$result = $this->matcher->match($request);
+
+    	$this->assertSame($this->deleteUserRule, $result->getMatchedRule());
     }
 }

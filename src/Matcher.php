@@ -56,11 +56,13 @@ final class Matcher
             return MatchResult::requestTargetNotMatched($request);
         }
 
+        $requestMethod = $this->guessCorrectMethod($request);
+
         // make sure rule matches method used and build 'allowed methods' in case of 405
         foreach ($matchedRules as $matchedRule) {
             $allowedMethods[] = $matchedRule->getMethod();
 
-            if ($matchedRule->matchesMethod($request->getMethod())) {
+            if ($matchedRule->matchesMethod($requestMethod)) {
             	$rulesMatchingMethod[] = $matchedRule;
             }
         }
@@ -100,5 +102,18 @@ final class Matcher
     	}
 
         return MatchResult::acceptHeaderNotMatched($request, $allowedMediaTypes);
+    }
+
+    private function guessCorrectMethod(ServerRequest $request): string
+    {
+    	$method = $request->getMethod();
+
+		if (strcasecmp($method, 'POST') === 0 && array_key_exists('_METHOD', $request->getParsedBody())) {
+			$method = $request->getParsedBody()['_METHOD'];
+		} else if ($request->hasHeader('X-HTTP-Method-Override')) {
+			$method = $request->getHeaderLine('X-HTTP-Method-Override');
+		}
+
+		return $method;
     }
 }
