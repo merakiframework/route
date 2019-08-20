@@ -148,6 +148,30 @@ final class MatcherTest extends TestSuite
     /**
      * @test
      */
+    public function rule_is_matched_if_request_method_and_rule_method_are_equivalent(): void
+    {
+    	$request = $this->requestFactory->createServerRequest('get', '/users/465');
+
+    	$result = $this->matcher->match($request);
+
+    	$this->assertSame($this->showUserByIdRule, $result->getMatchedRule());
+    }
+
+    /**
+     * @test
+     */
+    public function rule_is_not_matched_if_request_method_and_rule_method_differ(): void
+    {
+    	$request = $this->requestFactory->createServerRequest('patch', '/users/465');
+
+    	$result = $this->matcher->match($request);
+
+    	$this->assertEquals($result::METHOD_NOT_MATCHED, $result->getType());
+    }
+
+    /**
+     * @test
+     */
     public function allowed_methods_provided_to_match_result_are_unique(): void
     {
     	$request = $this->requestFactory->createServerRequest('PATCH', '/users/465');

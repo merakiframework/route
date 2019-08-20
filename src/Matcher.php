@@ -62,7 +62,7 @@ final class Matcher
         foreach ($matchedRules as $matchedRule) {
             $allowedMethods[] = $matchedRule->getMethod();
 
-            if ($matchedRule->matchesMethod($requestMethod)) {
+            if (strcasecmp($matchedRule->getMethod(), $requestMethod) === 0) {
             	$rulesMatchingMethod[] = $matchedRule;
             }
         }

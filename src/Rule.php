@@ -164,17 +164,6 @@ final class Rule
     }
 
     /**
-     * [matchesMethod description]
-     *
-     * @param string $requestMethod [description]
-     * @return boolean [description]
-     */
-    public function matchesMethod(string $requestMethod): bool
-    {
-        return strcasecmp($this->method, $requestMethod) === 0;
-    }
-
-    /**
      * [create description]
      *
      * @param string $method  [description]

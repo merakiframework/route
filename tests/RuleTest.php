@@ -155,30 +155,6 @@ final class RuleTest extends TestSuite
     /**
      * @test
      */
-    public function request_method_is_matched_to_rule_if_they_are_equivalent(): void
-    {
-    	$rule = new Rule('get', $this->pattern, $this->handler);
-
-    	$this->assertTrue($rule->matchesMethod('get'));
-    	$this->assertTrue($rule->matchesMethod('GET'));
-    	$this->assertTrue($rule->matchesMethod('gEt'));
-    }
-
-    /**
-     * @test
-     */
-    public function request_method_is_not_matched_to_rule_if_they_are_not_equivalent(): void
-    {
-    	$rule = new Rule('get', $this->pattern, $this->handler);
-
-    	$this->assertFalse($rule->matchesMethod('post'));
-    	$this->assertFalse($rule->matchesMethod('POST'));
-    	$this->assertFalse($rule->matchesMethod('pOsT'));
-    }
-
-    /**
-     * @test
-     */
     public function can_add_constraints_to_placeholders(): void
     {
     	$constraint = Constraint::alpha();
