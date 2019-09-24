@@ -14,7 +14,7 @@ final class MatcherTest extends TestSuite
 {
 	public function setUp(): void
 	{
-		$this->handler = $this->createMock(RequestHandler::class);;
+		$this->handler = $this->createMock(RequestHandler::class);
 		$this->mapper = new Mapper();
 
 		$this->mapper->get('/', $this->handler);
