@@ -5,6 +5,8 @@ namespace Meraki\Route;
 
 use Meraki\Route\Collection;
 use Meraki\Route\Rule;
+use Meraki\Route\RuleFactory;
+use Meraki\Route\RubyOnRailsRuleFactory;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Closure;
 
@@ -21,6 +23,21 @@ final class Mapper extends Collection
      * @var string The request-target prefix.
      */
     private $prefix = '';
+
+    /**
+     * @var RuleFactory|null Responsible for creating route-rule instances.
+     */
+    private $ruleFactory;
+
+    /**
+     * Constructor.
+     *
+     * @param RuleFactory|null $ruleFactory The factory responsible for making route-rules.
+     */
+    public function __construct(RuleFactory $ruleFactory = null)
+    {
+    	$this->ruleFactory = $ruleFactory ?: new RubyOnRailsRuleFactory();
+    }
 
     /**
      * Adds a route that responds to the 'HEAD' request method to the collection.
@@ -132,7 +149,7 @@ final class Mapper extends Collection
      */
     public function map(string $method, string $requestTarget, RequestHandler $handler): Rule
     {
-        $rule = Rule::create($method, $this->prefix . $requestTarget, $handler);
+        $rule = $this->ruleFactory->make($method, $this->prefix . $requestTarget, $handler);
 
         $this->add($rule);
 

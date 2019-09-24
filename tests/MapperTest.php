@@ -8,6 +8,7 @@ use Meraki\Route\Mapper;
 use Meraki\Route\Collection;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Meraki\Route\Rule;
+use Meraki\Route\RuleFactory;
 
 final class MapperTest extends TestSuite
 {
@@ -112,6 +113,25 @@ final class MapperTest extends TestSuite
 
 			$sut->assertEquals('/action' . $sut->requestTarget, (string) $rule->getPattern());
 		});
+	}
+
+	/**
+	 * @test
+	 */
+	public function can_use_a_custom_rule_factory(): void
+	{
+		$ruleFactory = new class() implements RuleFactory {
+			public $ruleParams;
+			public function make(string $method, string $pattern, RequestHandler $handler): Rule {
+				$this->ruleParams = [$method, $pattern, $handler];
+				return Rule::create($method, $pattern, $handler);
+			}
+		};
+		$mapper = new Mapper($ruleFactory);
+
+		$mapper->map('GET', $this->requestTarget, $this->handler);
+
+		$this->assertEquals(['GET', $this->requestTarget, $this->handler], $ruleFactory->ruleParams);
 	}
 
 	public function mapperMethods(): array
