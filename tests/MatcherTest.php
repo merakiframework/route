@@ -35,7 +35,7 @@ final class MatcherTest extends TestCase
 		$this->deleteUserRule = $this->mapper->delete('/users/:id', $this->handler)
 			->constrain('id', Constraint::digit());
 
-		$this->matcher = new Matcher($this->mapper);
+		$this->matcher = new Matcher($this->mapper->getRules());
 		$this->requestFactory = new ServerRequestFactory();
 	}
 

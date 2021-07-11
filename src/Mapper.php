@@ -17,12 +17,17 @@ use Closure;
  * @copyright 2019 Nathan Bishop
  * @license The MIT license.
  */
-final class Mapper extends Collection
+final class Mapper
 {
     /**
      * @var string The request-target prefix.
      */
     private $prefix = '';
+
+    /**
+     * @var Collection|null The collection of route-rule objects.
+     */
+    private $rules;
 
     /**
      * @var RuleFactory|null Responsible for creating route-rule instances.
@@ -32,10 +37,12 @@ final class Mapper extends Collection
     /**
      * Constructor.
      *
+     * @param Collection|null $ruleFactory The collection to hold the route-rules.
      * @param RuleFactory|null $ruleFactory The factory responsible for making route-rules.
      */
-    public function __construct(RuleFactory $ruleFactory = null)
+    public function __construct(Collection $rules = null, RuleFactory $ruleFactory = null)
     {
+    	$this->rules = $rules ?: new Collection();
     	$this->ruleFactory = $ruleFactory ?: new RubyOnRailsRuleFactory();
     }
 
@@ -151,8 +158,18 @@ final class Mapper extends Collection
     {
         $rule = $this->ruleFactory->make($method, $this->prefix . $requestTarget, $handler);
 
-        $this->add($rule);
+        $this->rules->add($rule);
 
         return $rule;
+    }
+
+    /**
+     * Get the collection containing the route-rules.
+     *
+     * @return Collection The route-rules that have been mapped.
+     */
+    public function getRules(): Collection
+    {
+    	return $this->rules;
     }
 }

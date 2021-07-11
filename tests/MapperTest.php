@@ -24,11 +24,26 @@ final class MapperTest extends TestCase
 	/**
 	 * @test
 	 */
-	public function is_a_collection(): void
+	public function own_rule_collection_can_be_provided(): void
+	{
+		$expectedRules = new Collection();
+		$mapper = new Mapper($expectedRules);
+
+		$actualRules = $mapper->getRules();
+
+		$this->assertSame($expectedRules, $actualRules);
+	}
+
+	/**
+	 * @test
+	 */
+	public function default_rule_collection_is_given_if_none_provided(): void
 	{
 		$mapper = new Mapper();
 
-		$this->assertInstanceOf(Collection::class, $mapper);
+		$actualRules = $mapper->getRules();
+
+		$this->assertInstanceOf(Collection::class, $actualRules);
 	}
 
 	/**
@@ -57,7 +72,7 @@ final class MapperTest extends TestCase
 
 		$rule = call_user_func([$mapper, $method], $this->requestTarget, $this->handler);
 
-		$this->assertTrue($mapper->contains($rule));
+		$this->assertTrue($mapper->getRules()->contains($rule));
 	}
 
 	/**
@@ -100,7 +115,7 @@ final class MapperTest extends TestCase
 
 		$rule = $mapper->map('VERB', $this->requestTarget, $this->handler);
 
-		$this->assertTrue($mapper->contains($rule));
+		$this->assertTrue($mapper->getRules()->contains($rule));
 	}
 
 	/**
@@ -130,7 +145,7 @@ final class MapperTest extends TestCase
 				return Rule::create($method, $pattern, $handler);
 			}
 		};
-		$mapper = new Mapper($ruleFactory);
+		$mapper = new Mapper(null, $ruleFactory);
 
 		$mapper->map('GET', $this->requestTarget, $this->handler);
 

@@ -35,7 +35,7 @@ final class DispatcherTest extends TestCase
 		$this->mapper->get('/say-hello/:person', $this->handler);
 		$this->mapper->get('/xml-file', $this->handler)->accept('text/xml');
 
-		$this->matcher = new Matcher($this->mapper);
+		$this->matcher = new Matcher($this->mapper->getRules());
 
 		$this->serverRequest = (new ServerRequestFactory())->createServerRequest('GET', '/');
 	}
