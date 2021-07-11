@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Meraki\Route\Rule;
+use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 
 /**
  * Represents the result of a route attempting a match against the incoming request.

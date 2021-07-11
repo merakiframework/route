@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Meraki\Route\Exception;
 
-use RuntimeException;
 use Meraki\Route\Exception as RouteException;
 use LogicException;
+use RuntimeException;
 
 /**
  * Exception used when the method of a route could not be matched to the request.

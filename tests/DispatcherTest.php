@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Meraki\TestSuite\TestCase;
 use Meraki\Route\Dispatcher;
 use Meraki\Route\Mapper;
 use Meraki\Route\Matcher;
+use Meraki\TestSuite\TestCase;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Http\Message\ResponseInterface as Response;

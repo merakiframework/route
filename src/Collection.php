@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
+use Meraki\Route\Rule;
 use IteratorAggregate;
 use Countable;
-use Meraki\Route\Rule;
 use LogicException;
 use ArrayIterator;
 

@@ -3,15 +3,15 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Psr\Http\Server\MiddlewareInterface as Middleware;
-use Meraki\Route\Matcher;
-use Psr\Http\Message\ServerRequestInterface as ServerRequest;
-use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
-use Psr\Http\Message\ResponseInterface as Response;
 use Meraki\Route\MatchResult;
+use Meraki\Route\Matcher;
 use Meraki\Route\Exception\MethodNotMatched as MethodNotMatchedException;
 use Meraki\Route\Exception\RequestTargetNotMatched as RequestTargetNotMatchedException;
 use Meraki\Route\Exception\AcceptHeaderNotMatched as AcceptHeaderNotMatchedException;
+use Psr\Http\Server\MiddlewareInterface as Middleware;
+use Psr\Http\Message\ServerRequestInterface as ServerRequest;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Psr\Http\Message\ResponseInterface as Response;
 
 /**
  * Invokes the matched request-handler or modifies the response in case of failure.

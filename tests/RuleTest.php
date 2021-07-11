@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Meraki\TestSuite\TestCase;
+use Meraki\Route\Pattern;
 use Meraki\Route\Rule;
 use Meraki\Route\Constraint;
+use Meraki\TestSuite\TestCase;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
-use Meraki\Route\Pattern;
 use InvalidArgumentException;
 
 /**

@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
+use Meraki\Route\MatchResult;
+use Meraki\Route\Rule;
 use Meraki\TestSuite\TestCase;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
-use Meraki\Route\MatchResult;
-use Meraki\Route\Rule;
 
 /**
  * @covers MatchResult::

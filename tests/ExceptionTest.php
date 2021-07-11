@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Meraki\TestSuite\TestCase;
 use Meraki\Route\Exception as RouteException;
+use Meraki\TestSuite\TestCase;
 
 /**
  * @covers Exception::

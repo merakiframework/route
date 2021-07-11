@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Meraki\Route\Exception;
 
-use Meraki\Route\Exception\AcceptHeaderNotMatched;
 use Meraki\Route\Exception as RouteException;
+use Meraki\Route\Exception\AcceptHeaderNotMatched;
 use Meraki\TestSuite\TestCase;
 use RuntimeException;
 

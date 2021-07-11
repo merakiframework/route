@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Meraki\TestSuite\TestCase;
 use Meraki\Route\Pattern;
 use Meraki\Route\Constraint;
+use Meraki\TestSuite\TestCase;
 
 /**
  * @covers Pattern::

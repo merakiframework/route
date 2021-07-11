@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Meraki\TestSuite\TestCase;
 use Meraki\Route\Collection;
 use Meraki\Route\Pattern;
-use LogicException;
+use Meraki\TestSuite\TestCase;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use LogicException;
 
 /**
  * @covers Collection::

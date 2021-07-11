@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Meraki\Route\Exception;
 
-use Meraki\TestSuite\TestCase;
-use Meraki\Route\Exception\MethodNotMatched;
 use Meraki\Route\Exception as RouteException;
+use Meraki\Route\Exception\MethodNotMatched;
+use Meraki\TestSuite\TestCase;
 use RuntimeException;
 use LogicException;
 

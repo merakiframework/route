@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Meraki\Route\Exception;
 
-use RuntimeException;
 use Meraki\Route\Exception as RouteException;
+use RuntimeException;
 
 /**
  * Exception used when the pattern of a route could not be matched against the request-target.
