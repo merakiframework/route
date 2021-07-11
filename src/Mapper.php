@@ -11,7 +11,7 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Closure;
 
 /**
- * An in-memory store for route rules.
+ * Object responsible for making route-rules.
  *
  * @author Nathan Bishop <nbish11@hotmail.com> (https://nathanbishop.name)
  * @copyright 2019 Nathan Bishop
