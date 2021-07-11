@@ -3,11 +3,14 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Meraki\TestSuite;
+use Meraki\TestSuite\TestCase;
 use Meraki\Route\Pattern;
 use Meraki\Route\Constraint;
 
-final class PatternTest extends TestSuite
+/**
+ * @covers Pattern::
+ */
+final class PatternTest extends TestCase
 {
     /**
      * @test

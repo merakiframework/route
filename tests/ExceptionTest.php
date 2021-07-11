@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Meraki\TestSuite;
+use Meraki\TestSuite\TestCase;
 use Meraki\Route\Exception as RouteException;
 
-final class ExceptionTest extends TestSuite
+/**
+ * @covers Exception::
+ */
+final class ExceptionTest extends TestCase
 {
     /**
      * @test

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Meraki\TestSuite;
+use Meraki\TestSuite\TestCase;
 use Meraki\Route\Dispatcher;
 use Meraki\Route\Mapper;
 use Meraki\Route\Matcher;
@@ -13,7 +13,10 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Zend\Diactoros\Response\EmptyResponse;
 use Zend\Diactoros\ServerRequestFactory;
 
-final class DispatcherTest extends TestSuite
+/**
+ * @covers Dispatcher::
+ */
+final class DispatcherTest extends TestCase
 {
 	private $handler;
 

@@ -5,10 +5,13 @@ namespace Meraki\Route;
 
 use Meraki\Route\RuleFactory;
 use Meraki\Route\RubyOnRailsRuleFactory;
-use Meraki\TestSuite;
+use Meraki\TestSuite\TestCase;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
-final class RubyOnRailsRuleFactoryTest extends TestSuite
+/**
+ * @covers RubyOnRailsRuleFactory::
+ */
+final class RubyOnRailsRuleFactoryTest extends TestCase
 {
 	public function setUp(): void
 	{

@@ -4,9 +4,12 @@ declare(strict_types=1);
 namespace Meraki\Route;
 
 use Meraki\Route\RuleFactory;
-use Meraki\TestSuite;
+use Meraki\TestSuite\TestCase;
 
-final class RuleFactoryTest extends TestSuite
+/**
+ * @covers RuleFactory::
+ */
+final class RuleFactoryTest extends TestCase
 {
 	/**
 	 * @test

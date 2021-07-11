@@ -3,12 +3,15 @@ declare(strict_types=1);
 
 namespace Meraki\Route\Exception;
 
-use Meraki\TestSuite;
+use Meraki\TestSuite\TestCase;
 use Meraki\Route\Exception\RequestTargetNotMatched;
 use Meraki\Route\Exception as RouteException;
 use RuntimeException;
 
-final class RequestTargetNotMatchedTest extends TestSuite
+/**
+ * @covers RequestTargetNotMatched::
+ */
+final class RequestTargetNotMatchedTest extends TestCase
 {
     /**
      * @test

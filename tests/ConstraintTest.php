@@ -4,9 +4,12 @@ declare(strict_types=1);
 namespace Meraki\Route;
 
 use Meraki\Route\Constraint;
-use Meraki\TestSuite;
+use Meraki\TestSuite\TestCase;
 
-final class ConstraintTest extends TestSuite
+/**
+ * @covers Constraint::
+ */
+final class ConstraintTest extends TestCase
 {
 	/**
 	 * @test

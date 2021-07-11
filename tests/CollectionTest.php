@@ -3,13 +3,16 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Meraki\TestSuite;
+use Meraki\TestSuite\TestCase;
 use Meraki\Route\Collection;
 use Meraki\Route\Pattern;
 use LogicException;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
-final class CollectionTest extends TestSuite
+/**
+ * @covers Collection::
+ */
+final class CollectionTest extends TestCase
 {
 	private $basicRule;
     private $complexRule;

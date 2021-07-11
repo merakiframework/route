@@ -3,14 +3,17 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Meraki\TestSuite;
+use Meraki\TestSuite\TestCase;
 use Meraki\Route\Rule;
 use Meraki\Route\Constraint;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Meraki\Route\Pattern;
 use InvalidArgumentException;
 
-final class RuleTest extends TestSuite
+/**
+ * @covers RuleTest::
+ */
+final class RuleTest extends TestCase
 {
 	private $pattern;
 	private $handler;

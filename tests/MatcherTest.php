@@ -3,14 +3,17 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Meraki\TestSuite;
+use Meraki\TestSuite\TestCase;
 use Meraki\Route\Matcher;
 use Meraki\Route\Mapper;
 use Meraki\Route\Constraint;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Zend\Diactoros\ServerRequestFactory;
 
-final class MatcherTest extends TestSuite
+/**
+ * @covers Matcher::
+ */
+final class MatcherTest extends TestCase
 {
 	public function setUp(): void
 	{

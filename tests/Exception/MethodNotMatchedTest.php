@@ -3,13 +3,16 @@ declare(strict_types=1);
 
 namespace Meraki\Route\Exception;
 
-use Meraki\TestSuite;
+use Meraki\TestSuite\TestCase;
 use Meraki\Route\Exception\MethodNotMatched;
 use Meraki\Route\Exception as RouteException;
 use RuntimeException;
 use LogicException;
 
-final class MethodNotMatchedTest extends TestSuite
+/**
+ * @covers MethodNotMatched::
+ */
+final class MethodNotMatchedTest extends TestCase
 {
     /**
      * @test

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Meraki\TestSuite;
+use Meraki\TestSuite\TestCase;
 use Meraki\Route\Collection;
 use Meraki\Route\Rule;
 use Meraki\Route\Pattern;
@@ -12,7 +12,10 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use RuntimeException;
 use InvalidArgumentException;
 
-final class UrlGeneratorTest extends TestSuite
+/**
+ * @covers UrlGenerator::
+ */
+final class UrlGeneratorTest extends TestCase
 {
 	private $basicRoute;
 	private $complexRoute;

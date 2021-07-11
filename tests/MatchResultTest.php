@@ -3,13 +3,16 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Meraki\TestSuite;
+use Meraki\TestSuite\TestCase;
 use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Meraki\Route\MatchResult;
 use Meraki\Route\Rule;
 
-final class MatchResultTest extends TestSuite
+/**
+ * @covers MatchResult::
+ */
+final class MatchResultTest extends TestCase
 {
 	public function setUp(): void
 	{

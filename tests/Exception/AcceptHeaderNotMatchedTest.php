@@ -5,10 +5,13 @@ namespace Meraki\Route\Exception;
 
 use Meraki\Route\Exception\AcceptHeaderNotMatched;
 use Meraki\Route\Exception as RouteException;
-use Meraki\TestSuite;
+use Meraki\TestSuite\TestCase;
 use RuntimeException;
 
-final class AcceptHeaderNotMatchedTest extends TestSuite
+/**
+ * @covers AcceptHeaderNotMatched::
+ */
+final class AcceptHeaderNotMatchedTest extends TestCase
 {
 	/**
 	 * @test

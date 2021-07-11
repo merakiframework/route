@@ -3,14 +3,17 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
-use Meraki\TestSuite;
+use Meraki\TestSuite\TestCase;
 use Meraki\Route\Mapper;
 use Meraki\Route\Collection;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Meraki\Route\Rule;
 use Meraki\Route\RuleFactory;
 
-final class MapperTest extends TestSuite
+/**
+ * @covers Mapper::
+ */
+final class MapperTest extends TestCase
 {
 	public function setUp(): void
 	{
