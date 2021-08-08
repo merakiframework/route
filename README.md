@@ -21,6 +21,45 @@ composer require meraki/route
 
 ## Usage
 
+### Getting Started
+
+```php
+<?php
+require_once 'vendor/autoload.php';
+
+use Meraki\Route\Collection;
+use Meraki\Route\Mapper;
+use Meraki\Route\Matcher;
+use Meraki\Route\MatchResult;
+
+// any psr7 and psr11 compliant library will work
+use Laminas\Diactoros\ServerRequestFactory;
+
+$map = new Mapper(new Collection());
+
+$map->get('/', new ShowHomepage());
+$map->get('/contact', new ShowContactForm());
+$map->post('/contact', new SendContactForm());
+
+$map->get('/users/:id', new DisplayEditUserForm())
+	->name('display.user.profile')
+	->constrain(':id', Constraint::digit());
+
+$map->get('/users/:id');
+
+$matcher = new Matcher($map->getRules());
+$result = $match->match(ServerRequestFactory::fromGlobals());
+
+if ($result->isSuccessful()) {
+	// handle a successful match
+} else {
+	// handle a failed match 404,405,406,etc.
+}
+
+```
+
+### Full Documentation
+
 See the [Wiki](https://github.com/merakiframework/route/wiki).
 
 ## Testing
