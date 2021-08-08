@@ -38,6 +38,11 @@ final class Rule
     private $name;
 
     /**
+     * { item_description }
+     */
+    private $description;
+
+    /**
      * @var string[] [$mediaTypes description]
      */
     private $mediaTypes;
@@ -60,6 +65,7 @@ final class Rule
         $this->pattern = $pattern;
         $this->handler = $handler;
         $this->name = '';
+        $this->description = '';
         $this->mediaTypes = [];
     }
 
@@ -104,6 +110,16 @@ final class Rule
     }
 
     /**
+     * Gets the description.
+     *
+     * @return string The description.
+     */
+    public function getDescription(): string
+    {
+    	return $this->description;
+    }
+
+    /**
      * [getMediaTypes description]
      *
      * @return string[] [description]
@@ -134,6 +150,13 @@ final class Rule
         $this->name = $name;
 
         return $this;
+    }
+
+    public function describe(string $description): self
+    {
+    	$this->description = $description;
+
+    	return $this;
     }
 
     /**

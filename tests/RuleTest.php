@@ -158,6 +158,29 @@ final class RuleTest extends TestCase
     /**
      * @test
      */
+    public function a_new_route_does_not_have_a_description(): void
+    {
+    	$rule = new Rule('get', $this->pattern, $this->handler);
+
+    	$this->assertEquals('', $rule->getDescription());
+    }
+
+    /**
+     * @test
+     */
+    public function a_description_can_be_set(): void
+    {
+    	$expectedDescription = 'A test route!';
+    	$rule = new Rule('get', $this->pattern, $this->handler);
+
+    	$rule->describe($expectedDescription);
+
+    	$this->assertEquals($expectedDescription, $rule->getDescription());
+    }
+
+    /**
+     * @test
+     */
     public function can_add_constraints_to_placeholders(): void
     {
     	$constraint = Constraint::alpha();
