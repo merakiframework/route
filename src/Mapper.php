@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
+use Meraki\Route\Collector;
 use Meraki\Route\Collection;
 use Meraki\Route\Rule;
 use Meraki\Route\RuleFactory;
@@ -17,7 +18,7 @@ use Closure;
  * @copyright 2019 Nathan Bishop
  * @license The MIT license.
  */
-final class Mapper
+final class Mapper implements Collector
 {
     /**
      * @var string The request-target prefix.

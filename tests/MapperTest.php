@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Meraki\Route;
 
+use Meraki\Route\Collector;
 use Meraki\Route\Mapper;
 use Meraki\Route\Collection;
 use Meraki\Route\Rule;
@@ -19,6 +20,16 @@ final class MapperTest extends TestCase
 	{
 		$this->requestTarget = '/say-hello';
 		$this->handler = $this->createMock(RequestHandler::class);
+	}
+
+	/**
+	 * @test
+	 */
+	public function is_a_collector(): void
+	{
+		$mapper = new Mapper();
+
+		$this->assertInstanceOf(Collector::class, $mapper);
 	}
 
 	/**
